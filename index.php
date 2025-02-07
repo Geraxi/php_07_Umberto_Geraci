@@ -1,83 +1,65 @@
 <?php
 
-$password= readline('inserisci qui la password');
-echo "Password inserita: " . $password . "\n";
+$password= readline("inserisci la tua password:\n");
 
-if (strlen($password)>=8){
-    echo "La tua password è lunga almeno 8 caratteri";
-}
-else{
-    echo "La password DEVE essere più lunga di 8 caratteri";
-}
-
-for ($i=0; $i<strlen($password); $i++){
-    if(is_numeric($password[$i])){
-     echo "La tua password contiene un numero.Bravo!";
-     break;
-    }
-}
-
-for($i=0;$i<strlen($password);$i++){
-    if(ctype_upper($password[$i])){
-        echo "La password contiene una maiuscola";
-        break;
-    }
-}
-
-$special_chars=["!","@","#","$"];
-for($i=0; $i < strlen($password);$i++){
-if(in_array($password[$i], $special_chars))
-echo "La password contiene un carattere speciale";
-break;
-}
-
-function checkLength($pwd){
-    if(strlen($pwd)>=8){
-        echo "La password é lunga almeno 8 caratteri\n";
+function checkLength($string){
+    if(strlen($string)>=8){
         return true;
     }
-    else{
-        echo "La password DEVE essere più lunga di 8 caratteri\n";
-        return false;
-    }
+    echo "La password DEVE contenere almeno 8 caratteri \n";
+    return false;
 }
 
-function checkNumber($pwd){
-    for($i=0;$i<strlen($pwd);$i++){
-        if(is_numeric($pwd[$i])){
-            echo "La password contiene un numero.BRAVO!\n";
-            return true;
-        }
+$firstrule= checkLength($password);
 
-    }
-}
-
-function checkSpecialChar($pwd){
-    for($i=0; $i<strlen($pwd);$i++){
-        if(in_array($pwd[$i], Special_Char)){
-            echo "La password contiene un carattere speciale";
-            return true;
-
-        }
-    }
-}
-
-function checkUpperCase($pwd){
-    for($i=0,$i<strlen($pwd);$i++){
-        if(cytpe_upper($pwd[$i])){
-            echo "La password contiene una maiuscola\n";
+function checkUppercase($string){
+    for($i=0; $i<strlen($string);$i++){
+        if(ctype_upper($string[$i])){
             return true;
         }
     }
+    echo "Manca una Maiuscola \n";
+    return false;
 }
+$secondrule= checkUppercase($password);
 
-
-function checkPassword($pwd){
-    $first_rule= checkLength($pwd);
-    $second_rule= checkNumber($pwd);
-    $third_rule= checkUpperCase($pwd);
-    $fourth_rule= checkSpecialChar($pwd);
-    if($first_rule && $second_rule && $third_rule && $fourth_rule){
-        echo "Password accettata\n";
+function checkNumber($string){
+    for($i=0;$i<strlen($string);$i++){
+        if(is_numeric($string[$i])){
+            return true;
+        }
     }
+    echo "Deve contenere almeno un numero \n";
+    return false;
 }
+$thirdrule= checkNumber($password);
+
+function checkSpecial($string){
+    $special_chars=["!","@","?","$"];
+    for($i=0;$i<strlen($string);$i++){
+        if(in_array($string[$i],$special_chars)){
+            return true;
+        }
+    }
+    echo "Inserisci almeno un carattere speciale";
+    return false;
+}
+
+$fourthrule= checkSpecial($password);
+
+
+function checkPassword($string){
+    $firstrule= checkLength($string);
+    $secondrule= checkUppercase($string);
+    $thirdrule= checkNumber($string);
+    $fourthrule= checkSpecial($string);
+
+    if($firstrule && $secondrule && $thirdrule && $fourthrule){
+        echo "Password accettata!\n";
+    }
+    return $firstrule && $secondrule && $thirdrule && $fourthrule;
+}
+
+do{
+    $password= readline("Scrivi la tua password: \n");
+}while(!checkPassword($password));
